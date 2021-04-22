@@ -23,14 +23,6 @@ resources:
       buildName: dbp_build
       buildNumber: 1    
 
-  - name: dbp_promoted_build_info
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: riqioArtifactory
-      buildName: dbp_build
-      buildNumber: 1
-      
-
 pipelines:
   - name: pipeline_dbp
     steps:
