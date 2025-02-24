@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "Hello, Docker!"
+echo "Hello, GH Docker!"
