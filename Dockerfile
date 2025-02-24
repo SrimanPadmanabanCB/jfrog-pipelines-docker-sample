@@ -1,8 +1,14 @@
-FROM ubuntu:18.04
-ADD . /
-RUN chmod +x /install.sh
+# Use official Ubuntu base image
+FROM ubuntu:latest
 
-RUN /install.sh && rm -rf /tmp && mkdir /tmp && chmod 1777 /tmp
+# Set the working directory inside the container
+WORKDIR /app
 
-ENV BASH_ENV "/etc/drydock/.env"
+# Copy a script to print message
+COPY hello.sh /app/hello.sh
 
+# Give execute permissions to the script
+RUN chmod +x /app/hello.sh
+
+# Set default command
+CMD ["/app/hello.sh"]
