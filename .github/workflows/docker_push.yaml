@@ -39,4 +39,5 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
 
       - name: Output Image URI
-        run: echo "Pushed Image: ${{ steps.vars.outputs.image_uri }}"
+        run: |
+          echo "Pushed Image: ${{ steps.vars.outputs.image_uri }}"
