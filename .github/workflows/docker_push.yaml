@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t $IMAGE_NAME:$IMAGE_TAG --label "org.opencontainers.image.commitid=${{ github.sha }}" .
+          docker build -t $IMAGE_NAME:$IMAGE_TAG --label "commitid=${{ github.sha }}" .
 
       - name: Push Docker Image to GHCR
         run: |
