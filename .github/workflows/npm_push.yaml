@@ -1,0 +1,42 @@
+name: Build & Push Docker Image to GHCR
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - npm
+
+jobs:
+  npm-build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write  # Required to push to npm or another package registry
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Adjust the version as necessary
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Run Tests
+        run: |
+          npm test
+
+      - name: Build Project (if necessary)
+        run: |
+          npm run build
+
+      - name: Publish Package to npm (optional)
+        run: |
+          # If you want to skip authentication and just run `npm publish`, uncomment the following line
+          npm publish --access public
+          echo "Skipping npm publish due to no authentication"
