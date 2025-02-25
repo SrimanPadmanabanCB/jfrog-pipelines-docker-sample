@@ -1,0 +1,48 @@
+name: Build & Publish Maven Package to GHCR
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - maven
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write  # Required to push to GitHub Container Registry (GHCR)
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'  
+          java-version: '17'  
+          cache: 'maven'  
+
+      - name: Create settings.xml for Maven Authentication
+        run: |
+          mkdir -p /home/runner/.m2
+          echo "<settings>" > /home/runner/.m2/settings.xml
+          echo "  <servers>" >> /home/runner/.m2/settings.xml
+          echo "    <server>" >> /home/runner/.m2/settings.xml
+          echo "      <id>github</id>" >> /home/runner/.m2/settings.xml
+          echo "      <username>${{ github.actor }}</username>" >> /home/runner/.m2/settings.xml
+          echo "      <password>${{ secrets.GITHUB_TOKEN }}</password>" >> /home/runner/.m2/settings.xml
+          echo "    </server>" >> /home/runner/.m2/settings.xml
+          echo "  </servers>" >> /home/runner/.m2/settings.xml
+          echo "</settings>" >> /home/runner/.m2/settings.xml
+
+      - name: Set up Maven using Docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: maven:3.8.4-openjdk-17  # Use Maven with OpenJDK 17
+          options: --rm -v /home/runner/.m2:/root/.m2 -v ${{ github.workspace }}:/usr/src/mymaven  # Mount .m2 and workspace
+          run: |
+            cd /usr/src/mymaven  # Set the working directory to the repository's root
+            mvn clean deploy -Dregistry=ghcr.io -Dusername=${{ github.actor }} -Dpassword=${{ secrets.GITHUB_TOKEN }} -DgroupId=com.example -DartifactId=my-library -Dversion=1.0.1
