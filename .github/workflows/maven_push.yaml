@@ -45,4 +45,4 @@ jobs:
           options: --rm -v /home/runner/.m2:/root/.m2 -v ${{ github.workspace }}:/usr/src/mymaven  # Mount .m2 and workspace
           run: |
             cd /usr/src/mymaven  # Set the working directory to the repository's root
-            mvn clean deploy -Dregistry=ghcr.io -Dusername=${{ github.actor }} -Dpassword=${{ secrets.GITHUB_TOKEN }} -DgroupId=com.example -DartifactId=my-library -Dversion=1.0.1
+            mvn clean deploy -Dregistry=ghcr.io -Dusername=${{ github.actor }} -Dpassword=${{ secrets.GITHUB_TOKEN }} -DgroupId=com.example -DartifactId=my-library -Dversion=1.0.1 -Dgit.commit.id=${env.GITHUB_SHA}
