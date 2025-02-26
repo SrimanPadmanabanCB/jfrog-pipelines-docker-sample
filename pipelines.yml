@@ -50,3 +50,4 @@ pipelines:
             - name: docker_build
           outputResources:
             - name: dbp_image
+            
