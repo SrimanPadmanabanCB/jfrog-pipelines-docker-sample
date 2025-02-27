@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: commit-test
 
       - name: Create Dummy File or Modify a File
         run: |
@@ -30,4 +31,4 @@ jobs:
         run: |
           git add .
           git commit -m "🤖 Automated Dummy Commit - $(date)" || echo "No changes to commit"
-          git push origin main
+          git push origin commit-test
